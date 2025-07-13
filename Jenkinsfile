@@ -32,7 +32,7 @@ pipeline {
             steps {
                 sshagent([env.SSH_CREDENTIALS]) {
                     sh '''
-                        ssh $REMOTE_USER@$REMOTE_HOST "mkdir -p $REMOTE_PATH"
+                        ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "mkdir -p $REMOTE_PATH"
                         rsync -avz --exclude=node_modules --exclude=.git ./ $REMOTE_USER@$REMOTE_HOST:$REMOTE_PATH/
                     '''
                 }
@@ -43,7 +43,7 @@ pipeline {
             steps {
                 sshagent([env.SSH_CREDENTIALS]) {
                     sh '''
-                        ssh $REMOTE_USER@$REMOTE_HOST "
+                        ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST"
                             cd $REMOTE_PATH &&
                             npm install &&
                             npx pm2 start app.js --name my-app --update-env || npx pm2 restart my-app
